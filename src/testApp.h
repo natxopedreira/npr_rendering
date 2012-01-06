@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxSimpleGuiToo.h"
 
 class testApp : public ofBaseApp{
 	
@@ -21,20 +22,23 @@ class testApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
 		ofTrueTypeFont font;
-		ofShader shader,shader8x8;
+		ofShader shader,shader8x8,hatch;
 		ofVideoGrabber camara;
-	ofVideoPlayer player;
-		bool doShader;
+		ofVideoPlayer player;
 		ofImage imaxe;
 	
-	float luminance1;
-    float luminance2;
-    float luminance3;
-    float luminance4;
-    float luminance5;
+		/// vars para el hatch shader
+	float m_ColorInfluenceLine;
+	float m_ColorInfluencePaper;
+	float m_FillValue;
+	float m_Luminance1;
+	float m_Luminance2;
+	float m_Luminance3;
+	float m_Luminance4;
+	float m_Luminance5;
+	float m_LineDistance;
+	float m_LineThickness;	
 	
-    int lineThickness;
-    int lineDistance;
 	
 };
 

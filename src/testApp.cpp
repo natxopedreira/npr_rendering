@@ -7,15 +7,31 @@ void testApp::setup(){
 	ofBackground(34, 34, 34);
 	ofSetVerticalSync(false);
 	ofEnableAlphaBlending();
-	camara.initGrabber(640, 480);
-	player.loadMovie("lucas.mov");
+	
+	player.loadMovie("loop640.mp4");
 	player.play();
-	//we load a font and tell OF to make outlines so we can draw it as GL shapes rather than textures
-	font.loadFont("type/verdana.ttf", 100, true, false, true, 0.4, 72);
+	
 	imaxe.loadImage("piedra.jpg");
 	shader.load("shaders/noise.vert", "shaders/noise.frag");
-	
 	shader8x8.load("shaders/bayermatrix.vert", "shaders/bayermatrix.frag");
+	hatch.load("shaders/hatch.vert", "shaders/hatch.frag");
+	
+	gui.addTitle("crosshatching");
+	gui.addSlider("ColorInfluenceLine", m_ColorInfluenceLine, 0.0, 1.0);
+	gui.addSlider("ColorInfluencePaper", m_ColorInfluencePaper, 0.0, 1.0);
+	gui.addSlider("FillValue", m_FillValue, 0.0, 1.0);
+	gui.addSlider("Luminance1", m_Luminance1, 0.0, 1.0);
+	gui.addSlider("Luminance2", m_Luminance2, 0.0, 1.0);
+	gui.addSlider("Luminance3", m_Luminance3, 0.0, 1.0);
+	gui.addSlider("Luminance4", m_Luminance4, 0.0, 1.0);
+	gui.addSlider("Luminance5", m_Luminance5, 0.0, 1.0);
+	gui.addSlider("LineDistance", m_LineDistance, 0.0, 10.0);
+	gui.addSlider("LineThickness", m_LineThickness, 0.0, 10.0);
+	gui.loadFromXML();
+	gui.show();
+	
+
+	
 }
 
 //--------------------------------------------------------------
@@ -24,6 +40,22 @@ void testApp::update(){
 	player.update();
 	shader.setUniformTexture("sceneTex", player.getTextureReference(), 0);
 	shader8x8.setUniformTexture("Tex0", player.getTextureReference(), 0);
+	hatch.setUniformTexture("Tex0", player.getTextureReference(), 0);
+	
+
+	cout << m_LineThickness << endl;
+	/*
+	m_ColorInfluenceLine = 0.0;
+	m_ColorInfluencePaper = 0.0;
+	m_FillValue = 0.9;
+	m_Luminance1 = 0.9;
+	m_Luminance2 = 0.7;
+	m_Luminance3 = 0.5;
+	m_Luminance4 = 0.3;
+	m_Luminance5 = 0.0;
+	m_LineDistance = 4.0;
+	m_LineThickness = 1.0;		
+	*/
 }
 
 //--------------------------------------------------------------
@@ -45,6 +77,25 @@ void testApp::draw(){
 	player.draw(0, 0);
 	shader8x8.end();
 	ofPopMatrix();
+	
+	ofPushMatrix();
+	ofTranslate(640, 360,0);
+	hatch.begin();
+	hatch.setUniform1f("m_ColorInfluenceLine", m_ColorInfluenceLine);
+	hatch.setUniform1f("m_ColorInfluencePaper", m_ColorInfluencePaper);
+	hatch.setUniform1f("m_FillValue", m_FillValue);
+	hatch.setUniform1f("m_Luminance1", m_Luminance1);
+	hatch.setUniform1f("m_Luminance2", m_Luminance2);
+	hatch.setUniform1f("m_Luminance3", m_Luminance3);
+	hatch.setUniform1f("m_Luminance4", m_Luminance4);
+	hatch.setUniform1f("m_Luminance5", m_Luminance5);
+	hatch.setUniform1f("m_LineDistance", m_LineDistance);
+	hatch.setUniform1f("m_LineThickness", m_LineThickness);
+	player.draw(0, 0);
+	hatch.end();
+	ofPopMatrix();
+	
+	gui.draw();
 }
 
 //--------------------------------------------------------------
